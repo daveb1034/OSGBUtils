@@ -6,28 +6,14 @@
 # Created By: Dave Barrett
 # Ceated On: 26/06/2019
 
-#gridLetters = {"SV":(0,0),"SQ":(0,1),"SL":(0,2),"SF":(0,3),"SA":(0,4),"NV":(0,5),"NQ":(0,6),"NL":(0,7),"NF":(0,8),"NA":(0,9),"HV":(0,10),"HQ":(0,11),"HL":(0,12),
-#                "SW":(1,0),"SR":(1,1),"SM":(1,2),"SG":(1,3),"SB":(1,4),"NW":(1,5),"NR":(1,6),"NM":(1,7),"NG":(1,8),"NB":(),"HW":(),"HR":(),"HM":()}
+gridLetters = {"SV":(0,0),"SQ":(0,1),"SL":(0,2),"SF":(0,3),"SA":(0,4),"NV":(0,5),"NQ":(0,6),"NL":(0,7),"NF":(0,8),"NA":(0,9),"HV":(0,10),"HQ":(0,11),"HL":(0,12),"SW":(1,0),
+                "SR":(1,1),"SM":(1,2),"SG":(1,3),"SB":(1,4),"NW":(1,5),"NR":(1,6),"NM":(1,7),"NG":(1,8),"NB":(1,9),"HW":(1,10),"HR":(1,11),"HM":(1,12),
+                "SX":(2,0),"SS":(2,1),"SN":(2,2),"SH":(2,3),"SC":(2,4),"NX":(2,5),"NS":(2,6),"NN":(2,7),"NH":(2,8),"NC":(2,9),"HX":(2,10),"HS":(2,11),"HN":(2,12),
+                "SY":(3,0),"ST":(3,1),"SO":(3,2),"SJ":(3,3),"SD":(3,4),"NY":(3,5),"NT":(3,6),"NO":(3,7),"NJ":(3,8),"ND":(3,9),"HY":(3,10),"HT":(3,11),"HO":(3,12),
+                "SZ":(4,0),"SU":(4,1),"SP":(4,2),"SK":(4,3),"SE":(4,4),"NZ":(4,5),"NU":(4,6),"NP":(4,7),"NK":(4,8),"NE":(4,9),"HZ":(4,10),"HU":(4,11),"HP":(4,12),
+                "TV":(5,0),"TQ":(5,1),"TL":(5,2),"TF":(5,3),"TA":(5,4),"OV":(5,5),"OQ":(5,6),"OL":(5,7),"OF":(5,8),"OA":(5,9),"JV":(5,10),"JQ":(5,11),"JL":(5,12),
+                "TW":(6,0),"TR":(6,1),"TM":(6,2),"TG":(6,3),"TB":(6,4),"OW":(6,5),"OR":(6,6),"OM":(6,7),"OG":(6,8),"OB":(6,9),"JR":(6,11),"JM":(6,12)}
 
-def gridLetters(e, n):
-    """Return full 6 Figure OS Grid Reference in the form SU 499 729."""
-
-    import math
-    # List of available grid letters, I is not included
-    gridChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
-
-    # need to make sure e / n wihin range
-    
-    # get the 100km grid indices
-    e100k = math.floor(e/100000)
-    n100k = math.floor(n/100000)
-
-    # translate to numeric equivalent of the grid letters
-    l1 = (19-n100k)-(19-n100k)%5+math.floor((e100k+10)/5)
-    l2 = (19-n100k)*5%25 + e100k%5
-
-    letPair = gridChars[int(l1)] + gridChars[int(l2)]
-    return letPair
 
 if __name__ == '__main__':
-    print(gridLetters(00000,1200000))
+    print(gridLetters["SU"])
