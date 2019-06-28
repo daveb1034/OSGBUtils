@@ -6,6 +6,7 @@
 # Created By: Dave Barrett
 # Ceated On: 26/06/2019
 import math
+import re
 gridLetters = {"SV":(0,0),"SQ":(0,1),"SL":(0,2),"SF":(0,3),"SA":(0,4),"NV":(0,5),"NQ":(0,6),"NL":(0,7),"NF":(0,8),"NA":(0,9),"HV":(0,10),"HQ":(0,11),"HL":(0,12),"SW":(1,0),
                 "SR":(1,1),"SM":(1,2),"SG":(1,3),"SB":(1,4),"NW":(1,5),"NR":(1,6),"NM":(1,7),"NG":(1,8),"NB":(1,9),"HW":(1,10),"HR":(1,11),"HM":(1,12),
                 "SX":(2,0),"SS":(2,1),"SN":(2,2),"SH":(2,3),"SC":(2,4),"NX":(2,5),"NS":(2,6),"NN":(2,7),"NH":(2,8),"NC":(2,9),"HX":(2,10),"HS":(2,11),"HN":(2,12),
@@ -75,11 +76,66 @@ def gridSquare(eastings, northings, squaresize):
     elif squaresize == 0.001:
         return grid100km + eastStr[1:] + northStr[2:]
         
-
+def gridCoords(reference):
+    """Returns a tuple of (eastings, northings) in metres from a full British National Grid Reference.
     
+    reference can be in any of the following forms:
+
+    SU
+    SU03
+    SU03NW
+    SU0339
+    SU0339NW
+    SU031395
+    SU03123956
+    SU0312339567
+    """
+    
+    # clean the input
+    reference = reference.replace(" ","").upper()
+    # grid quadrant included in the reference
+    quadExists = False
+
+    # define the patterns to match for each grid reference
+    p0 = re.match('^[\\w]+$', reference) # checks that only alphanumeric chas are in the reference
+    p1 = re.match('[HJNOST]{1}', reference[0]) # check the first 100km square is in HJNOST 
+    p2 = re.match('[^I]{1}', reference[1]) # check the second char is not I
+    p3 = None
+    p4 = None
+    p5 = None
+    p6 = None
+    p7 = None
+    p8 = None
+
+    # check validity of the supplied grid reference
+    if p0 is None:
+        return 'InvalidReference'
+
+    # check the 100km square validity and return the relevant coordinate tuple from gridLetters
+    if p1 is None or p2 is None:
+        return 'InvalidReference'
+    else:
+        return gridLetters[reference[:2]]
+
+
+    # validchars1 = ['H','J','N','O','S','T']
+    # validchars2 = ['A','B','C','D','E','F','G','H''J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    # validquads = ['NW','SW','NE','SE']
+    # if not reference[0] in validchars1:
+    #     return 'InvalidReference'
+    # if not reference[1] in validchars2:
+    #     return 'InvalidReference'
+    # if len(reference) < 2 or len(reference) > 12 or len(reference) % 2 != 0:
+    #     return 'InvalidReference'
+    # if reference[-2:].isalpha() and reference[-2:] in validquads:
+    #     quadExists = True
+
+
+    return 
 
 if __name__ == '__main__':
     print(gridLetters["SU"])
     letters = [k for k,v in gridLetters.items() if v == (4,1)]
     print (letters)
     print (gridSquare(125556,125456,0.001))
+    print (gridCoords('su 1234 nw'))
