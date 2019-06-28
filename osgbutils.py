@@ -13,7 +13,7 @@ gridLetters = {"SV":(0,0),"SQ":(0,1),"SL":(0,2),"SF":(0,3),"SA":(0,4),"NV":(0,5)
                 "SY":(3,0),"ST":(3,1),"SO":(3,2),"SJ":(3,3),"SD":(3,4),"NY":(3,5),"NT":(3,6),"NO":(3,7),"NJ":(3,8),"ND":(3,9),"HY":(3,10),"HT":(3,11),"HO":(3,12),
                 "SZ":(4,0),"SU":(4,1),"SP":(4,2),"SK":(4,3),"SE":(4,4),"NZ":(4,5),"NU":(4,6),"NP":(4,7),"NK":(4,8),"NE":(4,9),"HZ":(4,10),"HU":(4,11),"HP":(4,12),
                 "TV":(5,0),"TQ":(5,1),"TL":(5,2),"TF":(5,3),"TA":(5,4),"OV":(5,5),"OQ":(5,6),"OL":(5,7),"OF":(5,8),"OA":(5,9),"JV":(5,10),"JQ":(5,11),"JL":(5,12),
-                "TW":(6,0),"TR":(6,1),"TM":(6,2),"TG":(6,3),"TB":(6,4),"OW":(6,5),"OR":(6,6),"OM":(6,7),"OG":(6,8),"OB":(6,9),"JR":(6,11),"JM":(6,12)}
+                "TW":(6,0),"TR":(6,1),"TM":(6,2),"TG":(6,3),"TB":(6,4),"OW":(6,5),"OR":(6,6),"OM":(6,7),"OG":(6,8),"OB":(6,9),"JW":(6,10),"JR":(6,11),"JM":(6,12)}
 
 def gridSquare(eastings, northings, squaresize):
     """Returns the appropriate National Grid Reference including 100km letters.
@@ -32,7 +32,7 @@ def gridSquare(eastings, northings, squaresize):
         return 'InvalidSqaureSize'
     
     # get the 100km eastings and northings tuple
-    letTuple = (math.floor(eastings/100000),math.floor(northings/100000))
+    letTuple = (math.floor(eastings/100000.0),math.floor(northings/100000.0))
 
     grid100km = [k for k,v in gridLetters.items() if v == letTuple][0]
 
