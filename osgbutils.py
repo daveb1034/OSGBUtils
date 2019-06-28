@@ -180,12 +180,14 @@ def gridCoords(reference):
         eastings = int(str(grid100km[0]) + reference[2:6]) * 10
         northings = int(str(grid100km[1]) + reference[6:]) * 10
         squaresize = 0.01
-        return eastings,northings,squaresize    
-    if len(reference) == 12: # 10m grid
+        return eastings,northings,squaresize  
+      
+    if len(reference) == 12: # 1m grid
         eastings = int(str(grid100km[0]) + reference[2:7])
         northings = int(str(grid100km[1]) + reference[7:])
         squaresize = 0.001
         return eastings,northings,squaresize
+
 if __name__ == '__main__':
     print(gridLetters["SU"])
     letters = [k for k,v in gridLetters.items() if v == (4,1)]
