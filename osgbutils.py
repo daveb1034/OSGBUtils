@@ -77,7 +77,7 @@ def gridSquare(eastings, northings, squaresize):
         return grid100km + eastStr[1:] + northStr[2:]
         
 def gridCoords(reference):
-    """Returns a tuple of (eastings, northings) in metres from a full British National Grid Reference.
+    """Returns a tuple of (eastings, northings, squaresize) in metres from a full British National Grid Reference.
     
     reference can be in any of the following forms:
 
@@ -100,42 +100,95 @@ def gridCoords(reference):
     p0 = re.match('^[\\w]+$', reference) # checks that only alphanumeric chas are in the reference
     p1 = re.match('[HJNOST]{1}', reference[0]) # check the first 100km square is in HJNOST 
     p2 = re.match('[^I]{1}', reference[1]) # check the second char is not I
-    p3 = None
-    p4 = None
-    p5 = None
-    p6 = None
-    p7 = None
-    p8 = None
+    p3 = re.match('[A-Z]{2}',reference[-2:]) # check if we have a quadrant reference
+    p4 = re.match('[NS]{1}',reference[-2]) # check if quadrant first letter is valid
+    p5 = re.match('[EW]{1}',reference[-1]) # check if quadrant second letter is valid
+
 
     # check validity of the supplied grid reference
     if p0 is None:
-        return 'InvalidReference'
+        return 'InvalidReferenceA'
 
     # check the 100km square validity and return the relevant coordinate tuple from gridLetters
     if p1 is None or p2 is None:
-        return 'InvalidReference'
+        return 'InvalidReferenceB'
     else:
-        return gridLetters[reference[:2]]
+        grid100km = gridLetters[reference[:2]]
 
+    # check if we have a quadrant and if it is valid
 
-    # validchars1 = ['H','J','N','O','S','T']
-    # validchars2 = ['A','B','C','D','E','F','G','H''J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-    # validquads = ['NW','SW','NE','SE']
-    # if not reference[0] in validchars1:
-    #     return 'InvalidReference'
-    # if not reference[1] in validchars2:
-    #     return 'InvalidReference'
-    # if len(reference) < 2 or len(reference) > 12 or len(reference) % 2 != 0:
-    #     return 'InvalidReference'
-    # if reference[-2:].isalpha() and reference[-2:] in validquads:
-    #     quadExists = True
+    if p3 is None: 
+        quadExists = False
+    else:
+        if p4 is None or p5 is None and len(reference) > 2: # need to include the length test to avoid returning invlaid for 100km ref only
+            return 'InvalidReferenceC'
+        else:
+            quadExists = True
+            quadLetters = reference[-2:]
 
+    # retrieve the eastings and northings of the validated reference.
+    if len(reference) == 2: # 100km grid
+        eastings, northings = (n * 100000 for n in grid100km)
+        squaresize = 100
+        return eastings,northings,squaresize
 
-    return 
+    if len(reference) == 4: # 10km grid
+        eastings = int(str(grid100km[0]) + reference[2]) * 10000
+        northings = int(str(grid100km[1]) + reference[3]) * 10000
+        squaresize = 10
+        return eastings,northings,squaresize
+    
+    if len(reference) == 6: # 5km or 1km grid
+        if quadExists:
+            if quadLetters == 'NW':
+                quadDigit = ('0','5')
+            elif quadLetters == 'NE':
+                quadDigit = ('5','5')
+            elif quadLetters == 'SW':
+                quadDigit('0','0')
+            elif quadLetters == 'SE':
+                quadDigit = ('5','0')
+            eastings = int(str(grid100km[0]) + reference[2] + quadDigit[0]) * 1000
+            northings = int(str(grid100km[1]) + reference[3] + quadDigit[1]) * 1000
+            squaresize = 5
+        else:
+            eastings = int(str(grid100km[0]) + reference[2:4]) * 1000
+            northings = int(str(grid100km[1]) + reference[4:]) * 1000
+            squaresize = 1 
+        return eastings,northings,squaresize
 
+    if len(reference) == 8: # 500m or 100m grid
+        if quadExists:
+            if quadLetters == 'NW':
+                quadDigit = ('0','5')
+            elif quadLetters == 'NE':
+                quadDigit = ('5','5')
+            elif quadLetters == 'SW':
+                quadDigit('0','0')
+            elif quadLetters == 'SE':
+                quadDigit = ('5','0')
+            eastings = int(str(grid100km[0]) + reference[2:4] + quadDigit[0]) * 100
+            northings = int(str(grid100km[1]) + reference[4:6] + quadDigit[1]) * 100
+            squaresize = 0.5
+        else:
+            eastings = int(str(grid100km[0]) + reference[2:5]) * 100
+            northings = int(str(grid100km[1]) + reference[5:]) * 100
+            squaresize = 0.1 
+        return eastings,northings,squaresize
+
+    if len(reference) == 10: # 10m grid
+        eastings = int(str(grid100km[0]) + reference[2:6]) * 10
+        northings = int(str(grid100km[1]) + reference[6:]) * 10
+        squaresize = 0.01
+        return eastings,northings,squaresize    
+    if len(reference) == 12: # 10m grid
+        eastings = int(str(grid100km[0]) + reference[2:7])
+        northings = int(str(grid100km[1]) + reference[7:])
+        squaresize = 0.001
+        return eastings,northings,squaresize
 if __name__ == '__main__':
     print(gridLetters["SU"])
     letters = [k for k,v in gridLetters.items() if v == (4,1)]
     print (letters)
     print (gridSquare(125556,125456,0.001))
-    print (gridCoords('su 1234 nw'))
+    print (gridCoords('se0312339567'))
