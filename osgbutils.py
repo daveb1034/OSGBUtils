@@ -37,7 +37,10 @@ def gridSquare(eastings, northings, squaresize):
     grid100km = [k for k,v in gridLetters.items() if v == letTuple][0]
 
     # convert the eastigns and northings to strings of legth 6 and 7
-    eastStr = str(eastings)
+    if len(str(eastings)) <= 6:
+        eastStr = str(eastings).zfill(6)
+    else:
+        eastStr = str(eastings)
 
     if len(str(northings)) <= 7:
         northStr = str(northings).zfill(7)
@@ -192,5 +195,5 @@ if __name__ == '__main__':
     print(gridLetters["SU"])
     letters = [k for k,v in gridLetters.items() if v == (4,1)]
     print (letters)
-    print (gridSquare(125556,125456,0.001))
-    print (gridCoords('se0312339567'))
+    print (gridSquare(15000,439500,0.1))
+    print (gridCoords('se0339nw'))
