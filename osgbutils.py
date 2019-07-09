@@ -1,4 +1,4 @@
-# osgbuils.py
+# osgbutils.py
 # 
 # Pyhon port of the Ordnance Survey SpreadSheet available at:
 # https://www.ordnancesurvey.co.uk/docs/support/maptile-gridref-conversion.xls
